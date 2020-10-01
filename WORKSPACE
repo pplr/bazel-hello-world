@@ -1,7 +1,9 @@
 workspace(
     name = "hello-world",
     managed_directories = {
-        "@backend_npm": ["backend/node_modules"],
+        "@npm": ["node_modules"],
+        "@npm_backend": ["backend/node_modules"],
+        "@npm_e2e-test": ["e2e-test/node_modules"],
     },
 )
 
