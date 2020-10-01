@@ -1,0 +1,14 @@
+{
+  "name": "hello-world-bazel-workspace",
+  "license": "ISC",
+  "devDependencies": {
+    "@bazel/bazelisk": "^1.6.1",
+    "@bazel/cypress": "^2.2.0",
+    "@bazel/ibazel": "^0.13.2",
+    "@bazel/typescript": "^2.2.0",
+    "@cypress/browserify-preprocessor": "^3.0.1",
+    "cypress": "^5.3.0",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {}
+}

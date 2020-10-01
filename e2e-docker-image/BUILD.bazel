@@ -1,0 +1,22 @@
+load(
+    "@io_bazel_rules_docker//nodejs:image.bzl", 
+    "nodejs_image",
+)
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_image",
+)
+
+container_image(
+    name = "base_image",
+    base = "@nodejs_image_base//image",
+    ports = ["3000/tcp"],
+)
+
+nodejs_image(
+    name = "nodejs_image",
+    entry_point = "//backend:index.js",
+    data = ["//backend:main"],
+    # Override the base image.
+    base = ":base_image",
+)

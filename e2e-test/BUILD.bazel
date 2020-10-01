@@ -1,0 +1,30 @@
+load("@npm_e2e-test//@bazel/typescript:index.bzl", "ts_library")
+
+load("@npm_e2e-test//mocha:index.bzl", "mocha_test")
+
+package(default_visibility = ["//visibility:public"])
+
+ts_library(
+    name = "main",
+    tsconfig = "//:tsconfig.json",
+    srcs = ["index.ts"],
+    deps = [
+        "@npm_e2e-test//@types/mocha",
+        "@npm_e2e-test//@types/chai",
+    ],
+)
+
+filegroup(
+    name = "index.js",
+    srcs = ["main"],
+    output_group = "es5_sources",
+)
+
+mocha_test(
+    name = "bin",
+    args = [package_name() + "/index.js"],
+    data = [
+        "index.js",
+        "@npm_e2e-test//chai",
+    ],
+)
