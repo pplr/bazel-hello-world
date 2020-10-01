@@ -1,8 +1,18 @@
 import 'mocha'
-import { expect } from 'chai';
+import chai, { expect } from 'chai';
+import chaiHttp from 'chai-http';
 
-describe('Hello world', () => {
-    it('true is true', () => {
-        expect(true).to.be.true;
+chai.use(chaiHttp);
+
+const baseUrl = process.env["BACKEND_BASE_URL"] || "http://localhost:3000";
+
+describe('GET /', () => {
+    it('should return Hello World!', () => {
+        return chai.request(baseUrl).get("/").
+        then(res => {
+            expect(res).to.have.status(200)
+            expect(res).to.be.text;
+            expect(res.text).to.equal("Hello World!")
+        })
     });
 });

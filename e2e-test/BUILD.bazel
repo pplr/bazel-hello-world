@@ -1,6 +1,14 @@
 load("@npm_e2e-test//@bazel/typescript:index.bzl", "ts_library")
-
-load("@npm_e2e-test//mocha:index.bzl", "mocha_test")
+load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
+load(":runner.bzl", "line_length_test")
+load(
+    "@io_bazel_rules_docker//nodejs:image.bzl", 
+    "nodejs_image",
+)
+load(
+    "@io_bazel_rules_docker//container:container.bzl",
+    "container_image",
+)
 
 package(default_visibility = ["//visibility:public"])
 
@@ -11,20 +19,37 @@ ts_library(
     deps = [
         "@npm_e2e-test//@types/mocha",
         "@npm_e2e-test//@types/chai",
-    ],
-)
-
-filegroup(
-    name = "index.js",
-    srcs = ["main"],
-    output_group = "es5_sources",
-)
-
-mocha_test(
-    name = "bin",
-    args = [package_name() + "/index.js"],
-    data = [
-        "index.js",
+        "@npm_e2e-test//@types/chai-http",
+        "@npm_e2e-test//mocha",
         "@npm_e2e-test//chai",
+        "@npm_e2e-test//chai-http",
     ],
+)
+
+nodejs_test(
+    name = "bin",
+    entry_point = "@npm_e2e-test//:node_modules/mocha/bin/mocha",
+    args = [package_name() + "/index.js"],
+    data = [":main"],
+)
+
+container_image(
+    name = "base_image",
+    base = "@nodejs_image_base//image",
+    env = {"BACKEND_BASE_URL": "http://backend:3000"}
+)
+
+nodejs_image(
+    name = "docker",
+    entry_point = "@npm_e2e-test//:node_modules/mocha/bin/mocha",
+    args = [package_name() + "/index.js"],
+    data = [":main"],
+    # Override the base image.
+    base = ":base_image",
+)
+
+line_length_test(
+    name = "lines",
+    columns = 1,
+    srcs = ["index.ts"]
 )

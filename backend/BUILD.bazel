@@ -13,12 +13,6 @@ ts_library(
     ],
 )
 
-filegroup(
-    name = "index.js",
-    srcs = ["main"],
-    output_group = "es5_sources",
-)
-
 nodejs_binary(
     name = "bin",
     data = [":main"],
