@@ -1,6 +1,6 @@
 load("@npm_e2e-test//@bazel/typescript:index.bzl", "ts_library")
 load("@build_bazel_rules_nodejs//:index.bzl", "nodejs_test")
-load(":runner.bzl", "line_length_test")
+load("//tools:runner.bzl", "docker_compose_test")
 load(
     "@io_bazel_rules_docker//nodejs:image.bzl", 
     "nodejs_image",
@@ -8,7 +8,10 @@ load(
 load(
     "@io_bazel_rules_docker//container:container.bzl",
     "container_image",
+    "container_load",
 )
+
+
 
 package(default_visibility = ["//visibility:public"])
 
@@ -48,8 +51,11 @@ nodejs_image(
     base = ":base_image",
 )
 
-line_length_test(
+docker_compose_test(
     name = "lines",
-    columns = 1,
-    srcs = ["index.ts"]
+    images = {
+        "e2e-tests-runner" : ":docker",
+        "backend" : "//e2e-docker-image:nodejs_image",
+        },
+    compose_file = "docker-compose.yml"
 )

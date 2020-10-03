@@ -1,6 +1,6 @@
 version: "3.4"
 services:
   backend:
-    image: ""
+    image: "backend"
   test:
-    image: ""
+    image: "e2e-tests-runner"
