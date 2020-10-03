@@ -2,8 +2,6 @@ workspace(
     name = "hello-world",
     managed_directories = {
         "@npm": ["node_modules"],
-        "@npm_backend": ["backend/node_modules"],
-        "@npm_e2e-test": ["e2e-test/node_modules"],
     },
 )
 
@@ -23,18 +21,6 @@ yarn_install(
     name = "npm",
     package_json = "//:package.json",
     yarn_lock = "//:yarn.lock",
-)
-
-yarn_install(
-    name = "npm_backend",
-    package_json = "//backend:package.json",
-    yarn_lock = "//backend:yarn.lock",
-)
-
-yarn_install(
-    name = "npm_e2e-test",
-    package_json = "//e2e-test:package.json",
-    yarn_lock = "//e2e-test:yarn.lock",
 )
 
 # Docker

@@ -68,19 +68,6 @@ def _impl(ctx):
         is_executable = True,
     )
 
-    # ctx.actions.expand_template(
-    #     template = ctx.file._template,
-    #     substitutions = {
-    #         "%{docker_tool_path}": toolchain_info.tool_path,
-    #         "%{docker_image}": ctx.file.image.short_path,
-    #         "%{compose_file}": ctx.file.compose_file.short_path,
-    #     },
-    #     output = ctx.outputs.executable,
-    #     is_executable = True,
-    # )
-
-    # To ensure the files needed by the script are available, we put them in
-    # the runfiles.
     return [DefaultInfo(
         runfiles = ctx.runfiles(files = runfiles),
         executable = ctx.outputs.executable,

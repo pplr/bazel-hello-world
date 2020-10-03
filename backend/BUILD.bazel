@@ -15,10 +15,9 @@ ts_library(
     name = "main",
     tsconfig = "//:tsconfig.json",
     srcs = ["index.ts"],
-    node_modules = "@npm_backend//typescript:typescript__typings",
     deps = [
-        "@npm_backend//@types/express",
-        "@npm_backend//express",
+        "@npm//@types/express",
+        "@npm//express",
     ],
 )
 
