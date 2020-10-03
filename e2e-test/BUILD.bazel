@@ -8,15 +8,12 @@ load(
 load(
     "@io_bazel_rules_docker//container:container.bzl",
     "container_image",
-    "container_load",
 )
-
-
 
 package(default_visibility = ["//visibility:public"])
 
 ts_library(
-    name = "main",
+    name = "javascript",
     tsconfig = "//:tsconfig.json",
     srcs = ["index.ts"],
     deps = [
@@ -29,13 +26,6 @@ ts_library(
     ],
 )
 
-nodejs_test(
-    name = "bin",
-    entry_point = "@npm_e2e-test//:node_modules/mocha/bin/mocha",
-    args = [package_name() + "/index.js"],
-    data = [":main"],
-)
-
 container_image(
     name = "base_image",
     base = "@nodejs_image_base//image",
@@ -43,10 +33,10 @@ container_image(
 )
 
 nodejs_image(
-    name = "docker",
+    name = "docker_image",
     entry_point = "@npm_e2e-test//:node_modules/mocha/bin/mocha",
     args = [package_name() + "/index.js"],
-    data = [":main"],
+    data = [":javascript"],
     # Override the base image.
     base = ":base_image",
 )
@@ -54,8 +44,8 @@ nodejs_image(
 docker_compose_test(
     name = "lines",
     images = {
-        "e2e-tests-runner" : ":docker",
-        "backend" : "//e2e-docker-image:nodejs_image",
+        "e2e-tests-runner" : ":docker_image",
+        "backend" : "//backend:docker_image",
         },
     compose_file = "docker-compose.yml"
 )
